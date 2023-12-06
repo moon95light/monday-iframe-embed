@@ -14,7 +14,8 @@ export const useDataHooks = (
   setIframeSrc,
   setIsFetched,
   context,
-  tabsData
+  tabsData,
+  setHtml
 ) => {
   // Defining a memoized callback function to handle URL unfurling
   const handleUnfurl = useCallback(
@@ -33,6 +34,10 @@ export const useDataHooks = (
         setError("Invalid URL");
         return;
       }
+      fetchIframelyData(urlToUnfurl).then(function (result) {
+        setHtml({ __html: result });
+        console.log(result);
+      });
 
       // Setting the button clicked state to true
       setIsButtonClicked(true);

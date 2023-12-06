@@ -32,11 +32,14 @@ const MenuComponent = ({ monday }) => {
         monday
           .execute("openAppFeatureModal", {
             urlPath: "YOUR_URL_PATH_HERE",
+            urlParams: "params",
+            width: "800px",
+            height: "600px"
             // Add other required parameters here
           })
           .then((res) => {
             if (res.data.close) {
-              // Logic for when user closes the modal from inside
+              // Logic f.or when user closes the modal from inside
             }
           });
         break;

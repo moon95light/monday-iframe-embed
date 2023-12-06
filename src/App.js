@@ -9,6 +9,7 @@ import IframeDisplay from "./components/IframeDisplay"; // Importing custom Ifra
 import TabsUI from "./components/TabsUI"; // Importing custom TabsUI component
 import { useDataHooks } from "./hooks/useDataHooks"; // Importing custom hooks from useDataHooks file
 import MenuComponent from "./components/MenuComponent";
+import src from "monday-sdk-js";
 
 const monday = mondaySdk(); // Initializing the Monday SDK
 
@@ -23,7 +24,9 @@ const App = () => {
   const [isFetched, setIsFetched] = useState(false); // State to manage the fetched status
   const [iframeSources, setIframeSources] = useState({}); // State to hold iframe sources for all link columns
   const [tabsData, setTabsData] = useState([]); // State to store tab labels and iframe sources
-
+  const [html, setHtml] = useState({
+    __html: '<div />',
+  });
   // Destructuring custom hooks to get necessary functions
   const { handleUnfurl, fetchLinkColumnUrls, fetchIframeSrc } = useDataHooks(
     setIframeSources,
@@ -34,7 +37,8 @@ const App = () => {
     setIframeSrc,
     setIsFetched,
     context,
-    tabsData
+    tabsData,
+    setHtml
   );
 
   // useEffect hook to execute certain operations on component mount
@@ -46,7 +50,9 @@ const App = () => {
       console.log("PG_EA:: context", res); // Logging the context data (for debugging purposes)
     });
   }, []); // Empty dependency array to run only once on mount
-
+  useEffect(() => {
+    window.iframely && window.iframely.load();
+  });
   // Uncomment below useEffect hook if needed to fetch iframe source when context or isFetched state changes
   /*useEffect(() => {
     if (context && !isFetched) {
@@ -73,6 +79,7 @@ const App = () => {
   // Render method for App component
   return (
     <div className="App">
+      <p>Hello</p>
       {isButtonClicked ? (
         <TabsUI tabsData={tabsData} /> // Rendering TabsUI component if isButtonClicked is true
       ) : (
@@ -88,6 +95,7 @@ const App = () => {
         </>
       )}
       {
+        // isButtonClicked && <div dangerouslySetInnerHTML={html} />
         isButtonClicked && <IframeDisplay iframeSrc={iframeSrc} /> // Rendering IframeDisplay component if isButtonClicked is true
       }
       <MenuComponent monday={monday} />
